@@ -1,36 +1,32 @@
-import React, {useEffect, useState} from 'react'
-import {Text, FlatList, View, Image, Pressable} from 'react-native'
-import {Container, ClientDiv, ClientDivFlex, ClientTextKey, ClientDivInfo} from './styles'
-import {useNavigation} from '@react-navigation/native'
-import axios from 'axios'
+import React, { useEffect, useState, useContext } from 'react'
+import { AuthContext } from '../../contexts/auth'
+import { Text, FlatList, View, Image, Pressable } from 'react-native'
+import { Container, ClientDiv, ClientDivFlex, ClientTextKey, ClientDivInfo } from './styles'
+import { useNavigation } from '@react-navigation/native'
+import api from '../../services/api'
 
-export default function Clients ()
-{
-    const baseURL = 'http://192.168.100.41/'
-    const [data, setData] = useState([])
-    const [loading, setLoading] = useState(false)
+export default function Clients() {
+    const [client, setClient] = useState([])
+    const {seller} = useContext(AuthContext)
+
     useEffect(() => {
         loadAPI()
-    }, [])
+    }, [client])
 
-    async function loadAPI () {
-        if (loading) return
-        setLoading(true)
-        const response = await axios.post(`${baseURL}api/Clients/Clients.php`)
-        console.log(response.data.clients)
-        setData([...data, ...response.data.clients])
-        setLoading(false)
+    async function loadAPI() {
+        const response = await api.post(`api/Clients/Clients.php`, {id_seller: seller.id}).then((data) => {
+            setClient(data.data)
+        })
     }
 
     return (
         <Container>
-            <FlatList data={data} renderItem={({item}) => <ListItem data={item}></ListItem>} keyExtractor={item => item.id}></FlatList>
+            <FlatList data={client} renderItem={({ item }) => <ListItem client={item}></ListItem>} keyExtractor={item => item.id.toString()}></FlatList>
         </Container>
     )
 }
 
-function ListItem ({data})
-{
+function ListItem({ client }) {
     const navigation = useNavigation()
 
     return (
@@ -40,11 +36,11 @@ function ListItem ({data})
                     <View>
                         <ClientDivFlex>
                             <ClientTextKey>Razão Social</ClientTextKey>
-                            <Text>{data.corporate_name}</Text>
+                            <Text>{client.corporate_name}</Text>
                         </ClientDivFlex>
                         <ClientDivFlex>
                             <ClientTextKey>Nome Contato</ClientTextKey>
-                            <Text>{data.contact_name}</Text>
+                            <Text>{client.contact_name}</Text>
                         </ClientDivFlex>
                     </View>
                 </ClientDivInfo>

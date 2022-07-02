@@ -5,28 +5,28 @@ export const Container = styled.View`
   padding: 20px;
 `
 
-export const ClientDiv = styled.View`
+export const ProductDiv = styled.View`
   background-color: #306192;
   margin-bottom: 10px;
   padding: 20px;
   border-radius: 10px;
 `
 
-export const ClientDivInfo = styled.View`
+export const ProductDivInfo = styled.View`
 `
 
-export const ClientDivFlex = styled.View`
+export const ProductDivFlex = styled.View`
   display: flex;
   justify-content: center;
   align-items: center;
 `
 
-export const ClientTextKey = styled.Text`
+export const ProductTextKey = styled.Text`
   font-size: 18px;
   font-weight: bold;
   color: white;
 `
 
-export const ClientTextValue = styled.Text`
+export const ProductTextValue = styled.Text`
   color: white;
 `
