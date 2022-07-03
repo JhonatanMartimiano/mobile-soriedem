@@ -1,13 +1,13 @@
 import React, {useContext} from "react"
 import { AuthContext } from "../contexts/auth"
 import AuthRoutes from "./auth.routes"
-import AppRoutes from "./app.routes"
+import DrawerRoutes from "./drawer.routes"
 
 export default function Routes()
 {
     const {signed} = useContext(AuthContext)
 
     return (
-        signed ? <AppRoutes></AppRoutes> : <AuthRoutes></AuthRoutes>
+        signed ? <DrawerRoutes></DrawerRoutes> : <AuthRoutes></AuthRoutes>
     )
 }

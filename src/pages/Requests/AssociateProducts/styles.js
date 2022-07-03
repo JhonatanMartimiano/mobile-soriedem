@@ -9,7 +9,7 @@ export const styles = StyleSheet.create({
         backgroundColor: '#fafafa',
         padding: 5,
         width: '100%',
-        height: 50,
+        height: 'auto',
         justifyContent: "center",
         marginBottom: 10,
         zIndex: 11,
@@ -107,9 +107,6 @@ export const styles = StyleSheet.create({
     },
 
     containerFloat:{
-        bottom: 20,
-        right: 20,
-        position: 'absolute',
         backgroundColor: 'green',
         borderRadius: 10,
         zIndex: 9,
@@ -120,6 +117,6 @@ export const styles = StyleSheet.create({
 
     CartButton:{
         justifyContent: "center",
-        alignItems: "center",
-    },
+        alignItems: "center"
+    }
 })
