@@ -3,6 +3,7 @@ import { AuthContext } from '../../../contexts/auth'
 import { View, TouchableOpacity, Text, Modal, TextInput, Dimensions, FlatList } from 'react-native'
 import { Picker } from '@react-native-picker/picker'
 import { PickerView } from './styles'
+import FontAwesome from "react-native-vector-icons/FontAwesome"
 import api from '../../../services/api'
 
 export default function AddRequest({ navigation }) {
@@ -22,7 +23,7 @@ export default function AddRequest({ navigation }) {
         if (loading == false) {
             const response = await api.post('api/Clients/Clients.php', { id_seller: seller.id }).then((data) => {
                 setClient(data.data)
-            })
+            }).catch()
             setLoading(true)
         }
     }
@@ -46,8 +47,8 @@ export default function AddRequest({ navigation }) {
             <TouchableOpacity style={{ backgroundColor: '#039e26', padding: 10, borderRadius: 15, display: hide }} onPress={() => createRequest(seller, clientSelected)}>
                 <Text style={{ color: 'white', fontWeight: 'bold', textAlign: 'center' }}>CRIAR</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={{ backgroundColor: '#039e26', padding: 10, borderRadius: 15, display: show }} onPress={() => navigation.navigate('AssociateProducts', {request: request, clientID: clientSelected})}>
-                <Text style={{ color: 'white', fontWeight: 'bold', textAlign: 'center' }}>ADICIONAR ITENS DO PEDIDO</Text>
+            <TouchableOpacity style={{ backgroundColor: '#306192', padding: 10, borderRadius: 15, display: show, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }} onPress={() => navigation.navigate('AssociateProducts', {request: request, clientID: clientSelected})}>
+                <Text style={{ color: 'white', fontWeight: 'bold', textAlign: 'center', fontSize:18 }}><FontAwesome name="cart-plus" size={30} color="white" />ADICIONAR ITENS DO PEDIDO</Text>
             </TouchableOpacity>
         </View>
     )

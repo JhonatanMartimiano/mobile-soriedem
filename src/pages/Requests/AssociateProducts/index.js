@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigation } from '@react-navigation/native'
-import { View, TouchableOpacity, Text, Modal, TextInput, Dimensions, FlatList, StyleSheet, Pressable } from 'react-native'
+import { View, TouchableOpacity, Text, Modal, TextInput, Dimensions, FlatList, StyleSheet, Pressable, Image, Alert } from 'react-native'
 import { styles } from './styles'
 import FontAwesome from "react-native-vector-icons/FontAwesome"
-import ProductsCard from '../../../components/ProductsCard'
 import NumericInput from 'react-native-numeric-input';
+import { urlImage } from '../../../config'
 import api from '../../../services/api'
 
 export default function AssociateProducts(props) {
@@ -26,7 +26,7 @@ export default function AssociateProducts(props) {
         if (loading == false) {
             const response = await api.get(`api/Clients/ClientID.php?id=${props.route.params.clientID}`).then((data) => {
                 setClient(data.data)
-            })
+            }).catch()
             setLoading(true)
         }
     }
@@ -36,10 +36,14 @@ export default function AssociateProducts(props) {
     }
 
     async function createAssociateProduct(request, product, amount, nameProduct) {
-        const response = await api.post('api/AssociateProducts/CreateAssociateProducts.php', { id_request: request, id_product: product, amount: amount }).then((data) => {
-            setModalVisible(true)
-        })
-        setNameProduct(nameProduct)
+        if (amount < 1) {
+            Alert.alert('Informe a quantidade.')
+        } else {
+            const response = await api.post('api/AssociateProducts/CreateAssociateProducts.php', { id_request: request, id_product: product, amount: amount }).then((data) => {
+                setModalVisible(true)
+            })
+            setNameProduct(nameProduct)
+        }
     }
 
     async function Search() {
@@ -72,13 +76,16 @@ export default function AssociateProducts(props) {
                         <FontAwesome name="search" size={28} color="gray" />
                     </TouchableOpacity>
                 </View>
-
+                <View></View>
                 <View style={{ height: '70%' }}>
                     <FlatList
                         data={product}
                         renderItem={({ item }) => <View>
                             <View style={styles.box}>
-                                <Text style={{ color: '#000' }}>{item.title}</Text>
+                                <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                                    <Image style={{ width: 50, height: 50, marginRight: '5%' }} source={{ uri: `${urlImage}${item.photo}` }}></Image>
+                                    <Text style={{ color: '#000', fontSize: 15 }}>{item.title}</Text>
+                                </View>
                                 <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 10 }}>
                                     <NumericInput onChange={(number) => defineAmount(number)}></NumericInput>
                                     <View style={styles.containerFloat}>
@@ -112,10 +119,10 @@ export default function AssociateProducts(props) {
                         <View style={stylesz.centeredView}>
                             <View style={stylesz.modalView}>
                                 <View>
-                                    <Text style={{fontSize: 20, textAlign: 'center'}}>FORAM ADICIONADO <Text style={{color: 'black', fontWeight: 'bold'}}>{amount}</Text> UN. DE <Text style={{color: 'black', fontWeight: 'bold'}}>{nameProduct}</Text></Text>
+                                    <Text style={{ fontSize: 20, textAlign: 'center' }}>FORAM ADICIONADO <Text style={{ color: 'black', fontWeight: 'bold' }}>{amount}</Text> UN. DE <Text style={{ color: 'black', fontWeight: 'bold' }}>{nameProduct}</Text></Text>
                                 </View>
                                 <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end', flex: 1 }}>
-                                    <TouchableOpacity style={{ backgroundColor: 'green', padding: 10, borderRadius: 10 }} onPress={() => navigation.navigate('Requests')}>
+                                    <TouchableOpacity style={{ backgroundColor: 'green', padding: 10, borderRadius: 10 }} onPress={() => navigation.navigate('FinalizeRequest', { requestID: props.route.params.request })}>
                                         <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 15 }}>Finalizar Pedido</Text>
                                     </TouchableOpacity>
 

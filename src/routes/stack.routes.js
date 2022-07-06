@@ -5,9 +5,12 @@ import FontAwesome from "react-native-vector-icons/FontAwesome"
 import { View } from "react-native"
 import Clients from "../pages/Clients"
 import Products from "../pages/Products"
+import ProductDetails from "../pages/Products/ProductDetails"
 import Requests from "../pages/Requests"
 import AddRequest from "../pages/Requests/AddRequest"
 import AssociateProducts from "../pages/Requests/AssociateProducts"
+import FinalizeRequest from "../pages/Requests/FinalizeRequest"
+import RequestDetails from "../pages/Requests/RequestDetails"
 import Logout from "../pages/Logout"
 
 const StackRouter = createStackNavigator()
@@ -30,8 +33,9 @@ export function ClientsNavigations({navigation}) {
 
 export function ProductsNavigations({navigation}) {
     return(
-        <StackRouter.Navigator screenOptions={{title: 'Produtos', headerShown: true, headerLeft: () => <View style={{margin: 10}}><FontAwesome name="bars" size={20} color={'black'} onPress={() => navigation.openDrawer()} /></View>}}>
-            <StackRouter.Screen name="Products" component={Products} ></StackRouter.Screen>
+        <StackRouter.Navigator screenOptions={{headerShown: true}}>
+            <StackRouter.Screen name="Products" component={Products} options={{title: 'Produtos', headerLeft: () => <View style={{margin: 10}}><FontAwesome name="bars" size={20} color={'black'} onPress={() => navigation.openDrawer()} /></View>}} ></StackRouter.Screen>
+            <StackRouter.Screen name="ProductDetails" component={ProductDetails} options={{title: 'Detalhes do Produto'}} ></StackRouter.Screen>
         </StackRouter.Navigator>
     )
 }
@@ -42,6 +46,8 @@ export function RequestsNavigations({navigation}) {
             <StackRouter.Screen name="Requests" component={Requests} options={{title: 'Pedidos', headerLeft: () => <View style={{margin: 10}}><FontAwesome name="bars" size={20} color={'black'} onPress={() => navigation.openDrawer()} /></View>}} ></StackRouter.Screen>
             <StackRouter.Screen name="AddRequest" component={AddRequest} options={{title: 'Criar Pedido'}} ></StackRouter.Screen>
             <StackRouter.Screen name="AssociateProducts" component={AssociateProducts} options={{title: 'Adicionar Item'}} ></StackRouter.Screen>
+            <StackRouter.Screen name="FinalizeRequest" component={FinalizeRequest} options={{title: 'Finalizar Pedido'}} ></StackRouter.Screen>
+            <StackRouter.Screen name="RequestDetails" component={RequestDetails} options={{title: 'Detalhes do Pedido'}} ></StackRouter.Screen>
         </StackRouter.Navigator>
     )
 }
