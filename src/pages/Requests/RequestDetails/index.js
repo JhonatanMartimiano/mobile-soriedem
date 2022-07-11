@@ -14,7 +14,7 @@ export default function RequestDetails(props) {
     }, [request])
 
     async function getRequest() {
-        const response = await api.get(`api/Requests/RequestID.php?id_request=${props.route.params.requestID}`).then((data) => {
+        const response = await api.get(`api/Requests/RequestID.php?id_request=${props.route.params.requestID}&request_number=${props.route.params.request_number}`).then((data) => {
             setRequest(data.data)
             setLoading(false)
         }).catch()
@@ -41,14 +41,14 @@ export default function RequestDetails(props) {
                 <View style={{backgroundColor: '#306192', padding: 10, borderRadius: 10}}>
                     <Text style={{ fontSize: 20, textAlign: 'center', color: 'yellow' }}><Text style={{ fontWeight: 'bold', color: 'yellow' }}>PEDIDO:</Text> #{request.request.request_number}</Text>
                     <Text style={{ fontSize: 25, color: 'white', fontWeight: 'bold' }}>{request.client.corporate_name}</Text>
-                    <Text style={{ fontSize: 20, color: '#CCC' }}><Text style={{ color: '#CCC' }}>CNPJ:</Text> {date}</Text>
+                    <Text style={{ fontSize: 20, color: '#CCC' }}><Text style={{ color: '#CCC' }}>CNPJ:</Text> {request.client.cnpj}</Text>
                     <Text style={{ fontSize: 20, color: '#CCC' }}><Text style={{ color: '#CCC' }}>Data:</Text> {date}</Text>
                     <Text style={{ fontSize: 20, color: '#CCC' }}><Text style={{ color: '#CCC' }}>Vendedor:</Text> {seller.first_name} {seller.last_name}</Text>
                     <Text style={{ fontSize: 20, color: '#26fefe' }}><Text style={{ color: '#26fefe' }}>Status:</Text> {status}</Text>
                 </View>
                 <View style={styles.products}>
                     <Text style={styles.productsTitle}>ITENS DO PEDIDO</Text>
-                    <FlatList data={request.products} renderItem={({ item }) => <Text style={styles.product}>{item.title} | QTDE: {item.amount}</Text>}></FlatList>
+                    <FlatList data={request.products} renderItem={({ item }) => <Text style={styles.product}>{item.title} | Qtde: {item.current_amount}</Text>}></FlatList>
                 </View>
             </View>
         )

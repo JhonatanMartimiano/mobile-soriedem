@@ -65,7 +65,7 @@ function ListItem({ request }) {
     let date = `${day}/${month}/${year}`
 
     return (
-        <Pressable onPress={() => navigation.navigate('RequestDetails', { requestID: request.id })}>
+        <Pressable onPress={() => navigation.navigate('RequestDetails', { requestID: request.id, request_number: request.request_number })}>
             <RequestDiv>
                 <RequestDivInfo>
                     <View>

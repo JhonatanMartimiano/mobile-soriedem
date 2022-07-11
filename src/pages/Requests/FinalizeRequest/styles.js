@@ -6,25 +6,26 @@ export const styles = StyleSheet.create({
         flex: 1
     },
     info: {
-        fontSize: 20
+        fontSize: 20,
+        color: 'white'
     },
     infoKey: {
         fontWeight: 'bold',
-        color: 'black'
+        color: 'white'
     },
     request: {
         fontSize: 20,
-        textAlign: 'center',
-        marginBottom: 20
+        marginBottom: 20,
+        color: 'yellow'
     },
     products: {
-        marginTop: 20
+        marginTop: 0
     },
     productsTitle: {
         textAlign: 'center',
         fontSize: 20,
         fontWeight: 'bold',
-        color: 'black'
+        color: 'white'
     },
     product: {
         fontSize: 18

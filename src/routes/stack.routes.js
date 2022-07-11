@@ -8,6 +8,7 @@ import Products from "../pages/Products"
 import ProductDetails from "../pages/Products/ProductDetails"
 import Requests from "../pages/Requests"
 import AddRequest from "../pages/Requests/AddRequest"
+import Stock from "../pages/Requests/Stock"
 import AssociateProducts from "../pages/Requests/AssociateProducts"
 import FinalizeRequest from "../pages/Requests/FinalizeRequest"
 import RequestDetails from "../pages/Requests/RequestDetails"
@@ -45,6 +46,7 @@ export function RequestsNavigations({navigation}) {
         <StackRouter.Navigator screenOptions={{headerShown: true}}>
             <StackRouter.Screen name="Requests" component={Requests} options={{title: 'Pedidos', headerLeft: () => <View style={{margin: 10}}><FontAwesome name="bars" size={20} color={'black'} onPress={() => navigation.openDrawer()} /></View>}} ></StackRouter.Screen>
             <StackRouter.Screen name="AddRequest" component={AddRequest} options={{title: 'Criar Pedido'}} ></StackRouter.Screen>
+            <StackRouter.Screen name="Stock" component={Stock} options={{title: 'Estoque Atual'}} ></StackRouter.Screen>
             <StackRouter.Screen name="AssociateProducts" component={AssociateProducts} options={{title: 'Adicionar Item'}} ></StackRouter.Screen>
             <StackRouter.Screen name="FinalizeRequest" component={FinalizeRequest} options={{title: 'Finalizar Pedido'}} ></StackRouter.Screen>
             <StackRouter.Screen name="RequestDetails" component={RequestDetails} options={{title: 'Detalhes do Pedido'}} ></StackRouter.Screen>

@@ -23,9 +23,13 @@ export default function AddRequest({ navigation }) {
         if (loading == false) {
             const response = await api.post('api/Clients/Clients.php', { id_seller: seller.id }).then((data) => {
                 setClient(data.data)
-            }).catch()
+            }).catch(error => console.log(error))
             setLoading(true)
         }
+    }
+
+    async function goToStock() {
+        navigation.navigate('Stock', {id_client: clientSelected})
     }
 
     let listClients = null;
@@ -44,22 +48,9 @@ export default function AddRequest({ navigation }) {
                     {listClients}
                 </Picker>
             </PickerView>
-            <TouchableOpacity style={{ backgroundColor: '#039e26', padding: 10, borderRadius: 15, display: hide }} onPress={() => createRequest(seller, clientSelected)}>
-                <Text style={{ color: 'white', fontWeight: 'bold', textAlign: 'center' }}>CRIAR</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={{ backgroundColor: '#306192', padding: 10, borderRadius: 15, display: show, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }} onPress={() => navigation.navigate('AssociateProducts', {request: request, clientID: clientSelected})}>
-                <Text style={{ color: 'white', fontWeight: 'bold', textAlign: 'center', fontSize:18 }}><FontAwesome name="cart-plus" size={30} color="white" />ADICIONAR ITENS DO PEDIDO</Text>
+            <TouchableOpacity style={{ backgroundColor: '#039e26', padding: 10, borderRadius: 15, display: hide }} onPress={() => goToStock()}>
+                <Text style={{ color: 'white', fontWeight: 'bold', textAlign: 'center' }}>CRIAR PEDIDO</Text>
             </TouchableOpacity>
         </View>
     )
-
-    async function createRequest(seller, client) {
-        const response = await api.post('api/Requests/CreateRequest.php', { id_seller: seller.id, id_client: client }).then((data) => {
-            if (data.data !== false) {
-                setHide('none')
-                setShow()
-                setRequest(data.data)
-            }
-        })
-    }
 }

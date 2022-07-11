@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigation } from '@react-navigation/native'
-import { View, TouchableOpacity, Text, Modal, TextInput, Dimensions, FlatList, StyleSheet, Pressable, Image, Alert } from 'react-native'
+import { View, TouchableOpacity, Text, Modal, FlatList, StyleSheet, Pressable, Image, Alert } from 'react-native'
 import { styles } from './styles'
 import FontAwesome from "react-native-vector-icons/FontAwesome"
 import NumericInput from 'react-native-numeric-input';
@@ -8,126 +8,116 @@ import { urlImage } from '../../../config'
 import api from '../../../services/api'
 
 export default function AssociateProducts(props) {
-    const [onEndReachedCalledDuringMomentum, setMT] = useState(true);
     const [product, setProduct] = useState([])
-    const [search, setSearch] = useState("");
     const [client, setClient] = useState()
-    const [loading, setLoading] = useState(false)
-    const [modalVisible, setModalVisible] = useState(false);
-    const [nameProduct, setNameProduct] = useState()
-
-    const [amount, setAmount] = useState(0)
+    const [loading, setLoading] = useState(true)
+    const [modalVisible, setModalVisible] = useState(false)
 
     useEffect(() => {
         getClient()
     }, [client])
 
     async function getClient() {
-        if (loading == false) {
+        if (loading == true) {
             const response = await api.get(`api/Clients/ClientID.php?id=${props.route.params.clientID}`).then((data) => {
                 setClient(data.data)
-            }).catch()
-            setLoading(true)
+            }).catch(error => console.log(error))
+            setLoading(false)
         }
     }
 
-    function defineAmount(number) {
-        setAmount(number)
+    let stock = props.route.params.dataStock
+
+    function setStock(id, value) {
+        stock.map((v, i) => {
+            if (v.id == id) {
+                v.current_amount = value
+            }
+        })
     }
 
-    async function createAssociateProduct(request, product, amount, nameProduct) {
-        if (amount < 1) {
-            Alert.alert('Informe a quantidade.')
+    function checkDataStock() {
+        let modalArr = []
+        for (let i = 0; i < stock.length; i++) {
+            if (stock[i].previous_amount <= 0 && stock[i].current_amount <= 0) {
+                modalArr.push(stock[i])
+            }
+        }
+
+        if (modalArr.length == 0) {
+            navigation.navigate('FinalizeRequest', {clientID: props.route.params.clientID, product: stock})
         } else {
-            const response = await api.post('api/AssociateProducts/CreateAssociateProducts.php', { id_request: request, id_product: product, amount: amount }).then((data) => {
-                setModalVisible(true)
-            })
-            setNameProduct(nameProduct)
+            setModalVisible(!modalVisible)
         }
-    }
 
-    async function Search() {
-        const response = await api.get(`api/Products/SearchProducts.php?search=${search}`);
-        setProduct(response.data.products);
+        setProduct(modalArr)
     }
 
     const navigation = useNavigation()
 
-    if (loading == true) {
+    let dateDefault = new Date(),
+        day = dateDefault.getDate().toString().length > 1 ? dateDefault.getDate() : `0${dateDefault.getDate()}`,
+        month = dateDefault.getMonth().toString().length > 1 ? dateDefault.getMonth() + 1 : `0${dateDefault.getMonth() + 1}`,
+        year = dateDefault.getFullYear(),
+        date = `${day}/${month}/${year}`
+
+    if (loading == false) {
         return (
             <View style={{ padding: 20, flex: 1 }}>
-                <Text style={{ fontSize: 18 }}>Pedido: {props.route.params.request}</Text>
                 <Text style={{ fontSize: 18 }}>Cliente: {client.corporate_name}</Text>
-                <View style={styles.containerSearch}>
-                    <TextInput
-                        style={styles.search}
-                        placeholder="Pesquise algum produto."
-                        placeholderTextColor="gray"
-                        keyboardType="default"
-                        onChangeText={(search) => setSearch(search)}
-                        returnKeyType="search"
-                        onTextInput={() => Search()}
-                    />
-
-                    <TouchableOpacity
-                        style={styles.iconSearch}
-                        onPress={() => Search()}
-                    >
-                        <FontAwesome name="search" size={28} color="gray" />
-                    </TouchableOpacity>
-                </View>
-                <View></View>
-                <View style={{ height: '70%' }}>
+                <Text style={{ fontSize: 18 }}>Data da Reposição: {date}</Text>
+                <View style={{ height: '70%', marginTop: 10 }}>
                     <FlatList
-                        data={product}
-                        renderItem={({ item }) => <View>
-                            <View style={styles.box}>
-                                <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                                    <Image style={{ width: 50, height: 50, marginRight: '5%' }} source={{ uri: `${urlImage}${item.photo}` }}></Image>
-                                    <Text style={{ color: '#000', fontSize: 15 }}>{item.title}</Text>
-                                </View>
-                                <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 10 }}>
-                                    <NumericInput onChange={(number) => defineAmount(number)}></NumericInput>
-                                    <View style={styles.containerFloat}>
-                                        <TouchableOpacity
-                                            style={styles.CartButton}
-                                            onPress={() => createAssociateProduct(props.route.params.request, item.id, amount, item.title)}
-                                        >
-                                            <FontAwesome name="plus-circle" size={35} color="#fff" />
-                                        </TouchableOpacity>
+                        data={props.route.params.dataStock}
+                        renderItem={({ item }) => {
+                            return <View>
+                                <View style={styles.box}>
+                                    <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+                                        <Image style={{ width: 70, height: 70, marginRight: '5%' }} source={{ uri: `${urlImage}${item.photo}` }}></Image>
+                                        <Text style={{ color: '#000', fontSize: 15 }}>{item.title}</Text>
+                                    </View>
+                                    <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center', marginTop: 10 }}>
+                                        <Text style={{fontSize: 15}}>Quantidade Necessária:</Text>
+                                        <NumericInput onChange={(value) => setStock(item.id, value)}></NumericInput>
                                     </View>
                                 </View>
                             </View>
-                        </View>}
+                        }}
                         keyExtractor={item => String(item.id)}
-                        onEndReachedThreshold={0.1}
-                        removeClippedSubviews
-                        initialNumToRender={10}
-                        onMomentumScrollBegin={() => setMT(false)}
-                        windowSize={10}
-                        getItemLayout={(data, index) => (
-                            { length: 50, offset: 50 * index, index }
-                        )}
                     />
+                </View>
+                <View>
+                    <TouchableOpacity style={{ backgroundColor: 'green', padding: 10, borderRadius: 10, marginTop: 20 }} onPress={() => checkDataStock()}>
+                        <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center' }}>
+                            <FontAwesome name="plus-circle" size={35} color="#fff" />
+                            <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 20 }}>GRAVAR PEDIDO</Text>
+                        </View>
+                    </TouchableOpacity>
                 </View>
                 <View style={stylesz.centeredView}>
                     <Modal
                         animationType="slide"
                         transparent={true}
                         visible={modalVisible}
+                        onRequestClose={() => {
+                            Alert.alert("Modal has been closed.");
+                            setModalVisible(!modalVisible);
+                        }}
                     >
                         <View style={stylesz.centeredView}>
                             <View style={stylesz.modalView}>
-                                <View>
-                                    <Text style={{ fontSize: 20, textAlign: 'center' }}>FORAM ADICIONADO <Text style={{ color: 'black', fontWeight: 'bold' }}>{amount}</Text> UN. DE <Text style={{ color: 'black', fontWeight: 'bold' }}>{nameProduct}</Text></Text>
+                                <View style={{ display: 'flex', alignItems: 'center' }}>
+                                    <FontAwesome name={'warning'} size={35} color={'#FFC107'}></FontAwesome>
+                                    <Text style={{ fontSize: 18, color: '#FFC107' }}>Os itens abaixo estão zerados no estoque, é preciso fazer pedido para eles.</Text>
                                 </View>
-                                <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end', flex: 1 }}>
-                                    <TouchableOpacity style={{ backgroundColor: 'green', padding: 10, borderRadius: 10 }} onPress={() => navigation.navigate('FinalizeRequest', { requestID: props.route.params.request })}>
-                                        <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 15 }}>Finalizar Pedido</Text>
-                                    </TouchableOpacity>
 
-                                    <TouchableOpacity style={{ backgroundColor: 'red', padding: 10, borderRadius: 10 }} onPress={() => setModalVisible(!modalVisible)}>
-                                        <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 15 }}>Continuar</Text>
+                                <View style={{ marginBottom: 20, marginTop: 20, backgroundColor: '#306192', padding: 10, borderRadius: 10 }}>
+                                    <FlatList data={product} renderItem={({ item }) => <Text style={{ textAlign: 'center', color: 'white', fontSize: 18 }}>{item.title}</Text>}></FlatList>
+                                </View>
+
+                                <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
+                                    <TouchableOpacity style={{ backgroundColor: 'red', padding: 10, borderRadius: 10, width: '50%' }} onPress={() => setModalVisible(!modalVisible)}>
+                                        <Text style={{ color: 'white', fontWeight: 'bold', textAlign: 'center' }}>Fechar</Text>
                                     </TouchableOpacity>
                                 </View>
                             </View>
@@ -159,14 +149,19 @@ const stylesz = StyleSheet.create({
         borderRadius: 20,
         padding: 10,
         shadowColor: "#000",
-        shadowOffset: {
-            width: 0,
-            height: 2
-        },
         shadowOpacity: 0.25,
         shadowRadius: 4,
         elevation: 5,
-        height: '40%',
-        width: '90%'
+        height: 'auto',
+        width: '80%'
+    },
+    textStyle: {
+        color: "white",
+        fontWeight: "bold",
+        textAlign: "center"
+    },
+    modalText: {
+        marginBottom: 15,
+        textAlign: "center"
     }
 });
