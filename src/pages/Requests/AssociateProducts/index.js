@@ -10,8 +10,8 @@ import api from '../../../services/api'
 export default function AssociateProducts(props) {
     const [product, setProduct] = useState([])
     const [client, setClient] = useState()
-    const [loading, setLoading] = useState(true)
     const [modalVisible, setModalVisible] = useState(false)
+    const [loading, setLoading] = useState(true)
 
     useEffect(() => {
         getClient()
@@ -32,10 +32,11 @@ export default function AssociateProducts(props) {
         stock.map((v, i) => {
             if (v.id == id) {
                 v.current_amount = value
+                v.totalItem = v.current_amount * v.price
             }
         })
     }
-
+    
     function checkDataStock() {
         let modalArr = []
         for (let i = 0; i < stock.length; i++) {
@@ -45,7 +46,7 @@ export default function AssociateProducts(props) {
         }
 
         if (modalArr.length == 0) {
-            navigation.navigate('FinalizeRequest', {clientID: props.route.params.clientID, product: stock})
+            navigation.navigate('FinalizeRequest', { clientID: props.route.params.clientID, product: stock })
         } else {
             setModalVisible(!modalVisible)
         }
@@ -77,7 +78,7 @@ export default function AssociateProducts(props) {
                                         <Text style={{ color: '#000', fontSize: 15 }}>{item.title}</Text>
                                     </View>
                                     <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center', marginTop: 10 }}>
-                                        <Text style={{fontSize: 15}}>Quantidade Necessária:</Text>
+                                        <Text style={{ fontSize: 15 }}>Quantidade Necessária:</Text>
                                         <NumericInput onChange={(value) => setStock(item.id, value)}></NumericInput>
                                     </View>
                                 </View>

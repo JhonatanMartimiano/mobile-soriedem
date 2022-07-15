@@ -19,7 +19,8 @@ export const styles = StyleSheet.create({
         color: 'yellow'
     },
     products: {
-        marginTop: 0
+        marginTop: 0,
+        height: '100%'
     },
     productsTitle: {
         textAlign: 'center',

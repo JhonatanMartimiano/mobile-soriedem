@@ -3,7 +3,6 @@ import { AuthContext } from '../../../contexts/auth'
 import { View, TouchableOpacity, Text, Modal, TextInput, Dimensions, FlatList } from 'react-native'
 import { Picker } from '@react-native-picker/picker'
 import { PickerView } from './styles'
-import FontAwesome from "react-native-vector-icons/FontAwesome"
 import api from '../../../services/api'
 
 export default function AddRequest({ navigation }) {
@@ -11,8 +10,7 @@ export default function AddRequest({ navigation }) {
     const [client, setClient] = useState([])
     const [clientSelected, setClientSelected] = useState(0)
     const [hide, setHide] = useState()
-    const [show, setShow] = useState('none')
-    const [request, setRequest] = useState();
+
     const [loading, setLoading] = useState(false)
 
     useEffect(() => {

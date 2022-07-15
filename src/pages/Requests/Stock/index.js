@@ -36,7 +36,7 @@ export default function Stock(props) {
 
     if (clientProducts) {
         for (let i = 0; i < clientProducts.length; i++) {
-            stock.push({ id: clientProducts[i].id, title: clientProducts[i].title, photo: clientProducts[i].photo, previous_amount: 0, current_amount: 0 })
+            stock.push({ id: clientProducts[i].id, title: clientProducts[i].title, photo: clientProducts[i].photo, previous_amount: 0, current_amount: 0, price: clientProducts[i].price, totalItem: 0})
         }
     }
 

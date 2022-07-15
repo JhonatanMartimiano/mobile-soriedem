@@ -49,7 +49,7 @@ function ListItem({ product }) {
                     <View style={{ display: 'flex', flexDirection: 'row' }}>
                         <Image style={{ width: 90, height: 90, marginRight: '2%', borderWidth: 1, borderColor: 'white' }} source={{ uri: `${urlImage}${product.photo}` }}></Image>
                         <View style={{paddingRight: 80}}>
-                            <Text style={{color: 'white', fontSize: 20, fontWeight: 'bold', textTransform: 'uppercase'}}>{product.title}</Text>
+                            <Text style={{color: 'white', fontSize: 18, fontWeight: 'bold', textTransform: 'uppercase'}}>{product.title}</Text>
                             <Text style={{color: 'white'}}>{toLimit(product.description, 100)}...</Text>
                         </View>
                     </View>

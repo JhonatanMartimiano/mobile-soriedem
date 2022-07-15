@@ -70,9 +70,9 @@ function ListItem({ request }) {
                 <RequestDivInfo>
                     <View>
                         <View>
-                            <Text style={{ color: 'white', fontSize: 25, fontWeight: 'bold', textTransform: 'uppercase' }}>{request.corporate_name}</Text>
-                            <Text style={{ color: 'white', fontSize: 20 }}>CNPJ: {request.cnpj}</Text>
-                            <Text style={{ color: 'white', fontSize: 20 }}><Text style={{color: 'yellow', fontWeight: 'bold'}}>PEDIDO: #{request.request_number}</Text> | {date} | {status}</Text>
+                            <Text style={{ color: 'white', fontSize: 18, fontWeight: 'bold', textTransform: 'uppercase' }}>{request.corporate_name}</Text>
+                            <Text style={{ color: 'white', fontSize: 15 }}>CNPJ: {request.cnpj}</Text>
+                            <Text style={{ color: 'white', fontSize: 15 }}><Text style={{color: 'yellow', fontWeight: 'bold'}}>PEDIDO: #{request.request_number}</Text> | {date} | {status}</Text>
                         </View>
                     </View>
                 </RequestDivInfo>

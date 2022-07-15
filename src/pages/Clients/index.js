@@ -48,9 +48,9 @@ export default function Clients() {
                         <ClientDivInfo>
                             <View>
                                 <View>
-                                    <Text style={{ color: 'white', fontSize: 25, fontWeight: 'bold', textTransform: 'uppercase' }}>{client.corporate_name}</Text>
-                                    <Text style={{ color: 'white', fontSize: 20 }}>CNPJ: {client.cnpj}</Text>
-                                    <Text style={{ color: 'white', fontSize: 20 }}>ÚLT PED: {client.request_number} | {date} | {status}</Text>
+                                    <Text style={{ color: 'white', fontSize: 18, fontWeight: 'bold', textTransform: 'uppercase' }}>{client.corporate_name}</Text>
+                                    <Text style={{ color: 'white', fontSize: 15 }}>CNPJ: {client.cnpj}</Text>
+                                    <Text style={{ color: 'white', fontSize: 15 }}>ÚLT PED: {client.request_number} | {date} | {status}</Text>
                                 </View>
                             </View>
                         </ClientDivInfo>
