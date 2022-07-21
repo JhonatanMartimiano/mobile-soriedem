@@ -30,7 +30,7 @@ export default function Dashboard({navigation}) {
     return (
         <View style={styles.containerBox}>
             <ScrollView showsVerticalScrollIndicator={false}>
-                <TouchableOpacity onPress={() => navigation.navigate('Requests')}>
+                <TouchableOpacity onPress={() => navigation.navigate('RequestsRouter', {screen: 'RequestsFilter', params: {status: 1}})}>
                     <View>
                         <View style={styles.box}>
                             <FontAwesome style={styles.iconRegistered} name="shopping-cart" size={70} color="#FFC107"></FontAwesome>
@@ -43,7 +43,7 @@ export default function Dashboard({navigation}) {
                     </View>
                 </TouchableOpacity>
 
-                <TouchableOpacity onPress={() => navigation.navigate('Requests')}>
+                <TouchableOpacity onPress={() => navigation.navigate('RequestsRouter', {screen: 'RequestsFilter', params: {status: 2}})}>
                     <View>
                         <View style={styles.box}>
                             <FontAwesome style={styles.iconRegistered} name="shopping-cart" size={70} color="#28A745"></FontAwesome>
@@ -56,7 +56,7 @@ export default function Dashboard({navigation}) {
                     </View>
                 </TouchableOpacity>
 
-                <TouchableOpacity onPress={() => navigation.navigate('Requests')}>
+                <TouchableOpacity onPress={() => navigation.navigate('RequestsRouter', {screen: 'RequestsFilter', params: {status: 3}})}>
                     <View>
                         <View style={styles.box}>
                             <FontAwesome style={styles.iconRegistered} name="shopping-cart" size={70} color="#DC3545"></FontAwesome>

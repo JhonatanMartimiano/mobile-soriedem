@@ -1,40 +1,35 @@
 import React, { useEffect, useState, useContext } from 'react'
-import { AuthContext } from '../../contexts/auth'
+import { AuthContext } from '../../../contexts/auth'
 import { Text, FlatList, View, Pressable } from 'react-native'
-import { Container, RequestDiv, RequestDivFlex, RequestTextKey, RequestDivInfo, ButtonAdd, ButtonAddText } from './styles'
+import { Container, RequestDiv, RequestDivInfo, ButtonAdd, ButtonAddText } from './styles'
 import { useNavigation } from '@react-navigation/native'
-import api from '../../services/api'
+import api from '../../../services/api'
 
-export default function Requests({ navigation }) {
-    const [request, setRequest] = useState([])
+export default function RequestsFilter(props) {
     const { seller } = useContext(AuthContext)
-    const [loading, setLoading] = useState(true)
+    const [requests, setRequests] = useState([])
+    const [loading, setLoading] = useState(false)
 
-    async function loadAPI() {
-        const response = await api.get(`api/Requests/Requests.php?id_seller=${seller.id}`).then((data) => {
-            setRequest(data.data)
+    useEffect(() => {
+        getRequestsFilter()
+    }, [requests])
+
+    async function getRequestsFilter() {
+        const response = await api.get(`api/Requests/RequestsFilter.php?id_seller=${seller.id}&status=${props.route.params.status}`).then((data) => {
+            setRequests(data.data)
+            setLoading(false)
         })
-        setLoading(false)
     }
 
-    useEffect(() => {
-        loadAPI()
-    }, [request])
-
-    useEffect(() => {
-        const reload = navigation.addListener('focus', () => {
-            loadAPI()
-        })
-        return reload
-    }, [navigation])
+    const navigation = useNavigation()
 
     if (loading == false) {
         return (
             <Container>
-                <ButtonAdd onPress={() => navigation.navigate('AddRequest')}>
+                <ButtonAdd onPress={() => navigation.push('AddRequest')}>
                     <ButtonAddText>ADICIONAR PEDIDO</ButtonAddText>
                 </ButtonAdd>
-                <FlatList data={request} renderItem={({ item }) => <ListItem request={item}></ListItem>} keyExtractor={item => item.id}></FlatList>
+                <FlatList data={requests} renderItem={({ item }) => <ListItem request={item}></ListItem>} keyExtractor={item => item.id}></FlatList>
             </Container>
         )
     } else {
