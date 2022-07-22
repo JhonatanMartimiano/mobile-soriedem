@@ -31,7 +31,7 @@ export default function FinalizeRequest(props) {
 
     async function getLastRequest() {
         if (client) {
-            const response = await api.get(`api/Requests/LastRequest.php?id_seller=${seller.id}}&id_client=${client.id}}`).then((data) => {
+            const response = await api.get(`api/Requests/LastRequest.php?id_seller=${seller.id}`).then((data) => {
                 setLastRequest(data.data)
             })
         }
@@ -42,15 +42,24 @@ export default function FinalizeRequest(props) {
     async function createRequest() {
         let success = []
         for (let i = 0; i < products.length; i++) {
-            const response = await api.post(`api/Requests/CreateRequest.php`, { request_number: numberRequest, id_seller: seller.id, id_client: client.id, id_product: products[i].id, previous_amount: products[i].previous_amount, current_amount: products[i].current_amount, total: totalRequest }).then((data) => {
-                if (data.data != false) {
-                    success.push(data.data)
-                }
-            })
+            if (i == products.length - 1) {
+                const response = await api.post(`api/Requests/CreateRequest.php`, { request_number: numberRequest, id_seller: seller.id, id_client: client.id, id_product: products[i].id, previous_amount: products[i].previous_amount, current_amount: products[i].current_amount, total: totalRequest, test: 'test1' }).then((data) => {
+                    if (data.data != false) {
+                        success.push(data.data)
+                    }
+                })
+            } else {
+                const response = await api.post(`api/Requests/CreateRequest.php`, { request_number: numberRequest, id_seller: seller.id, id_client: client.id, id_product: products[i].id, previous_amount: products[i].previous_amount, current_amount: products[i].current_amount, total: totalRequest, test: 'test2' }).then((data) => {
+                    if (data.data != false) {
+                        success.push(data.data)
+                    }
+                })
+            }
         }
 
         if (success.length == products.length) {
             navigation.navigate('Requests')
+            api.post('api/Requests/SendMailRequest.php', {request_number: numberRequest})
         }
     }
 
@@ -79,12 +88,12 @@ export default function FinalizeRequest(props) {
                         <FlatList data={products} renderItem={({ item }) =>
                             <View style={{ marginBottom: 10 }}>
                                 <View style={{ display: 'flex', flexDirection: 'row' }}>
-                                    <View style={{marginRight: 10}}>
+                                    <View style={{ marginRight: 10 }}>
                                         <Image style={{ width: 60, height: 60 }} source={{ uri: `${urlImage}${item.photo}` }} ></Image>
                                     </View>
                                     <View>
                                         <Text style={styles.product}>{item.title}</Text>
-                                        <Text style={{fontSize: 13}}>Qtde: {item.current_amount}</Text>
+                                        <Text style={{ fontSize: 13 }}>Qtde: {item.current_amount}</Text>
                                         <Text style={{ fontSize: 15 }}>Total Item: R$ {parseFloat(item.totalItem).toFixed(2).replace('.', ',')}</Text>
                                     </View>
                                 </View>
