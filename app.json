@@ -1,14 +1,14 @@
 {
 	"name": "soriedem",
 	"icon": "./src/assets/img/config/iconsoriedem.png",
-	"version": "1.0.0",
+	"version": "1.0.2",
 	"slug": "soriedem",
 	"ios": {
 		"bundleIdentifier": "br.com.soriedem.app",
-		"buildNumber": "1.0.0"
+		"buildNumber": "1.0.2"
 	},
 	"android": {
 		"package": "br.com.soriedem.app",
-		"versionCode": 1
+		"versionCode": 3
 	}
 }
